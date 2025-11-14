@@ -52,6 +52,13 @@ function M.get_github_url(use_permalink)
     local start_line = vim.fn.line("'<")
     local end_line = vim.fn.line("'>")
 
+    -- Fallback to current cursor line if no visual selection
+    if start_line == 0 or end_line == 0 then
+        local cursor_line  = vim.api.nvim_win_get_cursor(0)[1]
+        start_line = cursor_line
+        end_line = cursor_line
+    end
+
     local repo_url = get_git_remote_url()
     local relative_path = get_relative_path()
     local ref = use_permalink and get_current_commit() or get_current_branch()
